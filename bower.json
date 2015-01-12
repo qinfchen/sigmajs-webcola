@@ -1,0 +1,26 @@
+{
+  "name": "sigmajs-webcola",
+  "version": "0.0.0",
+  "authors": [
+    "Qinfeng Chen <qinfeng.ch@gmail.com>"
+  ],
+  "description": "webcola plugin for sigma.js",
+  "main": "build/sigma.layout.cola.js",
+  "keywords": [
+    "cola",
+    "plugin",
+    "sigma"
+  ],
+  "ignore": [
+    "/.*",
+    "/Gruntfile.js",
+    "/bower_components"
+  ],
+  "dependencies": {
+    "animation-frame": "https://github.com/kof/animation-frame.git",
+    "WebCola": "https://github.com/tgdwyer/WebCola.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/qinfchen",
+  "private": true
+}
