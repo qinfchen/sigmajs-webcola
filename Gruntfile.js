@@ -21,16 +21,23 @@ module.exports = function (grunt) {
     bower_concat: {
       all: {
         dest: 'build/bower_components.js',
-        include: [
-          'animation-frame',
-          'WebCola'
-        ]
+        mainFiles: {
+          'animation-frame': 'AnimationFrame.js',
+          'WebCola': 'WebCola/cola.v3.min.js'
+        }
       }
     },
     concat: {
       dist: {
         src: files,
         dest: 'build/sigma.layout.cola.js'
+      }
+    },
+    uglify: {
+      my_target: {
+        files: {
+          'build/sigma.layout.cola.min.js': ['build/sigma.layout.cola.js']
+        }
       }
     },
     jshint: {
@@ -44,9 +51,10 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('grunt-bower-concat');
   grunt.registerTask('default', [
+    'closureLint',
+    'jshint',
     'bower_concat',
     'concat',
-    'closureLint',
-    'jshint'
+    'uglify'
   ]);
 };
