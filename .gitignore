@@ -1,2 +1,4 @@
-/node_modules/
 /bower_components/
+/build/bower_components.js
+/node_modules/
+.*
