@@ -13,8 +13,13 @@
   ],
   "ignore": [
     "/.*",
+    "/bower_components/",
+    "/build/bower_components.js",
     "/Gruntfile.js",
-    "/bower_components"
+    "/jshint.json",
+    "/node_modules/",
+    "/package.json",
+    "/sigmajs-cola.js"
   ],
   "dependencies": {
     "animation-frame": "0.1.7",
