@@ -18,7 +18,7 @@ To build the code:
  - Use `grunt` to build and minify the plugin
 
 ## How to Use It
-Note: you need to an instance of sigma to run this plugin
+Note: you need to have an instance of sigma to run this plugin
 ```javascript
 var gSigma = new sigma({
     settings: {
@@ -30,7 +30,7 @@ var gSigma = new sigma({
 });
 ```
 
-Once all nodes and edges are added to gSigma, you can start the web cola simulation by calling `gSigma.startCola()`:
+Once all nodes and edges are added to `gSigma`, you can start the web cola simulation by calling `gSigma.startCola()`:
 ```javascript
 gSigma.startCola({
     handleDisconnected: true,
@@ -39,7 +39,7 @@ gSigma.startCola({
     alignment: 'y'
 });
 ```
-Call `gSigma.stopCola()` to stop the web cola simulation or `gSigma.killCola` to kill the web cola instance.
+Call `gSigma.stopCola()` to stop the web cola simulation or `gSigma.killCola()` to kill the web cola instance.
 
 ## Layout Options
 
@@ -62,6 +62,7 @@ Call `gSigma.stopCola()` to stop the web cola simulation or `gSigma.killCola` to
 ### Positioning Options
  * **alignment**
    * Align child nodes along either x axis or y axis. It will be ignored if the **constraints** option is specified.
+   * This is a lazy way to generate contraints to force all child nodes to be on th same axis.
    * type: *string*
    * default value: `undefined`
  * **avoidOverlaps**
