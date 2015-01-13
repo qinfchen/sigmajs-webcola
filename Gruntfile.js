@@ -23,7 +23,7 @@ module.exports = function (grunt) {
         dest: 'build/bower_components.js',
         mainFiles: {
           'animation-frame': 'AnimationFrame.js',
-          'WebCola': 'WebCola/cola.v3.min.js'
+          'webcola': 'WebCola/cola.v3.min.js'
         }
       }
     },
