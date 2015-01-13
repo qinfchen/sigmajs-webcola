@@ -7,33 +7,17 @@
 
   // default layout options
   var defaultOptions = {
-    convergenceThreshold: 0.01,
-
-    // link length options
-    linkLength: undefined,
-    symmetricDiffLinkLengths: 6,
-
-    // positioning options
-    // relative alignment constraints on the nodes with the same
-    // parent node.
-    alignment: undefined,
     avoidOverlaps: true,
-    // layout constraints. If specified, alignment option will be
-    // ignored
-    constraints: undefined,
+    convergenceThreshold: 0.01,
     handleDisconnected: true,
-
-    // iterations for cola algorithm
-    // unconstrained initial layout iterations
     initialUnconstrainedIterations: 0,
-    // initial layout iterations with user-specified constraints
     initialUserConstraintIterations: 0,
-    // initial layout iterations with all constraints including
-    // non-overlap
-    initialAllConstraintsIterations: 0
+    initialAllConstraintsIterations: 0,
+    symmetricDiffLinkLengths: 6
   };
 
   function ColaLayout(sigInst, options) {
+    //initialize cola instance
     this.animationFrame = new AnimationFrame();
     this.colaNodeIndices = {};
     this.dragListener = sigma.plugins.dragNodes(
@@ -43,7 +27,7 @@
     this.sigInst = sigInst;
 
     for (var i in options) {
-      if (options[i] != null) {
+      if (options[i].hasOwnProperty) {
         this.options[i] = options[i];
       }
     }
@@ -69,8 +53,12 @@
     });
 
     edges.forEach(function(edge) {
+      // set up cola edges
       var sourceIndex = colaNodeIndices[edge.source];
       var targetIndex = colaNodeIndices[edge.target];
+
+      // keep track of all parent nodes, so we can use this to create
+      // layout constraints
       if (parentNodes[sourceIndex] == null) {
         parentNodes[sourceIndex] = [];
       }
@@ -84,9 +72,12 @@
 
     var adaptor = cola.adaptor({
       trigger: function() {
-          sigInst.refresh();
+        // trigger gets called on simulation events: start, tick, and
+        // end. Update sigma nodes when one of these events occurs
+        sigInst.refresh();
       },
       kick: function(tick) {
+        // we may want to decrease number of tick per frame
         function frame() {
           if (tick()) {
             return;
@@ -103,6 +94,7 @@
       }
     });
 
+    // initialize cola adaptor
     adaptor
       .size([container.offsetWidth, container.offsetHeight])
       .avoidOverlaps(options.avoidOverlaps)
@@ -111,9 +103,10 @@
       .handleDisconnected(options.handleDisconnected)
       .convergenceThreshold(options.convergenceThreshold);
 
+    // lazy contraints logic to align child nodes
     if (options.constraints == null && options.alignment != null &&
-        (options.alignment === 'x' || options.alignment === 'y')) {
-      options.constraints = [];
+      (options.alignment === 'x' || options.alignment === 'y')) {
+      var constraints = [];
       parentNodes.forEach(function(parentNode) {
         var constraint = {'type': 'alignment',
           'axis': options.alignment,
@@ -121,8 +114,9 @@
         parentNode.forEach(function(target) {
           constraint.offsets.push({node: target, offset: 0});
         });
-        options.constraints.push(constraint);
+        constraints.push(constraint);
       });
+      adaptor.constraints(constraints);
     }
 
     if (options.constraints != null) {
@@ -133,17 +127,18 @@
       adaptor.linkDistance(options.linkLength);
     }
 
-    if (options.flowLayout != null &&
-        options.flowLayout.axis != null) {
-      var minSeparation = options.flowLayout.minSeparation != null ?
-          options.flowLayout.minSeparation : 0;
-      adaptor.flowLayout(options.flowLayout.axis, minSeparation);
+    if (options.flow != null &&
+        options.flow.axis != null) {
+      var minSeparation = options.flow.minSeparation != null ?
+          options.flow.minSeparation : 0;
+      adaptor.flowLayout(options.flow.axis, minSeparation);
     }
 
     adaptor.start(options.initialUnconstrainedIterations,
         options.initialUserConstraintIterations,
         options.initialAllConstraintsIterations);
 
+    // use dragListener from sigma to perform drag actions
     dragListener.bind('startdrag', function(e) {
       adaptor.dragstart(e.data.node);
       adaptor.resume();
@@ -153,13 +148,13 @@
       var node = e.data.node;
       node.px = node.x;
       node.py = node.y;
-      adaptor.resume();
     });
 
     dragListener.bind('dragend', function(e) {
       var node = e.data.node;
       node.px = node.x;
       node.py = node.y;
+      adaptor.resume();
       adaptor.dragend(e.data.node);
     });
 
