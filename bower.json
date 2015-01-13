@@ -21,7 +21,7 @@
     "/package.json",
     "/sigmajs-cola.js"
   ],
-  "dependencies": {
+  "devDependencies": {
     "animation-frame": "0.1.7",
     "webcola": "3.0.1"
   },

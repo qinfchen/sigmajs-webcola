@@ -56,8 +56,8 @@ Call `gSigma.stopCola()` to stop the web cola simulation or `gSigma.killCola()` 
    * default value: `20`
  * **symmetricDiffLinkLengths**
    * Specify the symmetric diff link length
-   * type: *boolean*
-   * default value: `false`
+   * type: *number*
+   * default value: `6`
 
 ### Positioning Options
  * **alignment**
